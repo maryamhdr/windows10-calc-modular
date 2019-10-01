@@ -5,7 +5,7 @@
     <title>Calculator</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width = device-width, initial-scale = 1.0" />
-    <link rel="stylesheet" type="text/css" href="styles.css"/>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
     <title>Calculator</title>
 </head>
 
@@ -116,7 +116,7 @@
                     </div>
                 </div>
 
-                <div class="var-body">
+                <div class="body">
 
                     <div class="screen">
                         <div class="screen-holder" id="expression"></div>
@@ -141,7 +141,7 @@
                         </div>
                         <div class="memory-btn disabled" onclick="openMemory(event)" id="mBtn">M<img
                                 src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAYAAADimHc4AAAABmJLR0QA/wD/AP+gvaeTAAAB9UlEQVR4nO3avYoTYRhH8TPKaKGCvddgYyUWVkLuwJtQUmQiSbmWUZwUgjfhHUy/VmLhNdiLH4tKkhkbsV7XPO/Hcn5liucN/wOpApIkSZIkSZIkSZIkSZIkSZIkSZKkWjWRx/u+fzxN0zPgLnA98q0Av4CPwMuu695GPRIWoO/7p9M0vY66n1LTNE8Wi8WbkNsRR7fb7e1xHD8BNyLuZ/C9bds78/n867EPXzn2QYBxHB9wecYHuLnf7+9HHA4JcBmN4xjyaxESYLfbnQI/Im5ncnY4HN5FHA4JsF6vvwBdxO0cmqZZrlarbxG3r0YcBRiG4f1sNvsJPIp6I5GTruteRR0PCwAwDMNp5RFOuq57HvlAaACoOkL4+JAgAFQZIcn4kCgAVBUh2fiQMABUESHp+JA4ABQdIfn4kCEAFBkhy/iQKQAUFSHb+JAxABQRIev4kDkAZI2QfXwoIABkiVDE+FBIAEgaoZjxoaAAkCRCUeNDYQEgNEJx40OBASAkQpHjQ6EB4KgRih0fCg4AR4lQ9PhQeAD4rwjFjw8VBIALRahifKgkAPxThGrGh4oCwLkiVDU+VBYA/kb4DDwErv35+GyapuVyuXyR8atdSOi/oyNtNptbbdveA9jtdh+i/rcjSZIkSZIkSZIkSZIkSZIkqRK/Aatx6SzdM82mAAAAAElFTkSuQmCC"
-                                width="10" height="10" id="sortDownImg"/>
+                                width="10" height="10" id="sortDownImg" />
                             <div class="tooltip">Memory</div>
                         </div>
                     </div>
@@ -328,6 +328,36 @@
 
         </div>
     </div>
+
+    <script>
+        var app = {
+            elements: {
+                expression: getElement("expression"),
+                result: getElement("result"),
+                memoryList1: getElement("memoryList1"),
+                memoryList2: getElement("memoryList2"),
+                trashIcon1: getElement("trashIcon1"),
+                trashIcon2: getElement("trashIcon2"),
+                historyList1: getElement("historyList1"),
+                historyList2: getElement("historyList2"),
+                trashIcon3: getElement("trashIcon3"),
+                trashIcon4: getElement("trashIcon4"),
+                memory: getElement('memory'),
+                historyPad: getElement('history'),
+                keypad: getElement('keypad'),
+                myNav: getElement('myNav'),
+                historyIcon: getElement('historyIcon'),
+                mcBtn: getElement('mcBtn'),
+                mrBtn: getElement('mrBtn'),
+                mBtn: getElement('mBtn'),
+                memoryScreen: getElement('memoryScreen'),
+                historyScreen: getElement('historyScreen'),
+                historyIconImg: getElement('historyIconImg'),
+                sortDownImg: getElement('sortDownImg')
+            },
+            getElement: function(id) {return document.getElementById(id); }
+        }
+    </script>
 
     <script src="main.js"></script>
     <script src="history.js"></script>
