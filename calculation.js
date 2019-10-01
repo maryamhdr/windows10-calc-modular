@@ -18,34 +18,186 @@
             'backspace': onBackspaceClicked
         }
 
-        app.calc = function (type, value) {
-            var handler = _operations[type];
-            if(!handler) return;
-            handler(value);
+    app.calc = function (type, value) {
+        var handler = _operations[type];
+        if (!handler) return;
+        handler(value);
+    }
+
+    function onOperandClicked(value) {
+        if (!txtResult && !txtExpression && value === "0") return;
+
+        if (value === "." && txtResult.includes(".")) return;
+
+        if (value === "." && !txtResult) {
+            txtResult = "0";
         }
 
-        function onOperandClicked (value) {
-            console.log(value)
+        txtResult += value;
+        _elm.result.textContent = txtResult;
+        lastResult = parseFloat(txtResult);
+    }
+
+    function onOperatorClicked(value) {
+        var action;
+
+        if (!txtExpression && !txtResult) {
+            if (value !== "√" && value !== "1/") return;
         }
 
-        function onOperatorClicked (value) {
-            console.log(value)
+        if (txtResult.charAt(txtResult.length - 1) === ".") {
+            txtResult = txtResult.substr(0, txtResult.length - 1);
         }
 
-        function onEqualBtnClicked () {
-
+        if (value === "√" && _elm.result.textContent.includes("-")) {
+            onClearAllClicked("Invalid input");
+            return;
         }
 
-        function onCEClicked () {
-
+        if (value === "1/" && _elm.result.textContent === "0") {
+            onClearAllClicked("Cannot divide by zero");
+            return;
         }
 
-        function onClearAllClicked () {
-
+        switch (value) {
+            case "±":
+                action = onPlusMinesClicked;
+                break;
+            case "√":
+            case "sqr":
+            case "cube":
+            case "1/":
+                action = onSpecOperatorClicked;
+                break;
+            default:
+                action = onNormalClicked;
+                break;
         }
 
-        function onBackspaceClicked () {
-            
+        action(value);
+        return;
+    }
+
+    function onPlusMinesClicked() {
+        txtResult = _elm.result.textContent.includes("-") ?
+            _elm.result.textContent.replace("-", "") :
+            "-" + _elm.result.textContent;
+        _elm.result.textContent = txtResult;
+        return;
+    }
+
+    function checkIndexOfSpecOperand() {
+        if (txtResult.indexOf('cube') === 0 ||
+            txtResult.indexOf('sqr') === 0 ||
+            txtResult.indexOf('1/') === 0 ||
+            txtResult.indexOf("√") === 0) return true;
+        else return false;
+    }
+
+    function includesSpecOperand() {
+        if (_elm.expression.textContent.includes("sqr") ||
+            _elm.expression.textContent.includes("cube") ||
+            _elm.expression.textContent.includes("1/") ||
+            _elm.expression.textContent.includes("√")) {
+            let max = expression.textContent.lastIndexOf("(");
+            expression.textContent = expression.textContent.substr(0, max + 1 - (cubeAcc * 5 + sqrAcc * 4 + sqrtAcc * 2 + divideAcc * 3));
         }
+    }
+
+    function computeTemp(v) {
+        if (checkIndexOfSpecOperand()) {
+            switch (v) {
+                case "√":
+                    temp = `Math.sqrt(${temp})`;
+                    break;
+                case "sqr":
+                    temp = `Math.pow(${temp},2)`;
+                    break;
+                case "cube":
+                    temp = `Math.pow(${temp},3)`;
+                    break;
+                case "1/":
+                    temp = `1/(${temp})`;
+                    break;
+            }
+            txtResult = `${v}(${txtResult})`;
+        } else {
+            switch (v) {
+                case "√":
+                    temp = `Math.sqrt(${_elm.result.textContent})`;
+                    break;
+                case "sqr":
+                    temp = `Math.pow(${_elm.result.textContent},2)`;
+                    break;
+                case "cube":
+                    temp = `Math.pow(${_elm.result.textContent},3)`;
+                    break;
+                case "1/":
+                    temp = `1/(${_elm.result.textContent})`;
+                    break;
+            }
+            txtResult = `${v}(${_elm.result.textContent})`;
+        }
+    }
+
+    function evaluate(value) {
+        _elm.result.textContent = eval(value);
+    }
+
+    function computeAccurances() {
+        divideAcc = (txtResult.match(/\//g) || []).length;
+        cubeAcc = (txtResult.match(/cube/g) || []).length;
+        sqrAcc = (txtResult.match(/sqr/g) || []).length;
+        sqrtAcc = (txtResult.match(/√/g) || []).length;
+    }
+
+    function onSpecOperatorClicked(value) {
+
+        specSymbol = true;
+        computeTemp(value);
+        evaluate(temp);
+
+        if (sqrtAcc + sqrAcc + divideAcc + cubeAcc === 0) {
+            _elm.expression.textContent += txtResult + " ";
+            computeAccurances();
+            return;
+        }
+
+        includesSpecOperand();
+        computeAccurances();
+        _elm.expression.textContent += txtResult + " ";
+        return;
+    }
+
+    function onNormalClicked() {
+        console.log("Normal")
+    }
+
+    function onEqualClicked() {
+
+    }
+
+    function onCEClicked() {
+        txtResult = "";
+        _elm.result.textContent = "0";
+    }
+
+    function onClearAllClicked(v) {
+        if (!v) v = "0";
+        txtResult = "";
+        txtExpression = "";
+        _elm.result.textContent = v;
+        _elm.expression.textContent = "";
+    }
+
+    function onBackspaceClicked() {
+        if (!txtResult) {
+            _elm.result.textContent = "0";
+            return;
+        }
+        txtResult = txtResult.substring(0, txtResult.length - 1);
+        lastResult = parseFloat(txtResult);
+        _elm.result.textContent = txtResult === "" ? "0" : txtResult;
+    }
 
 }(app);
