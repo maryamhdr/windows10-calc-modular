@@ -1,6 +1,7 @@
 + function (app) {
-    var txtResult = "",
-        txtExpression = "",
+    var txtResult = app.globals.txtResult,
+        txtExpression = app.globals.txtExpression,
+        recalled = app.globals.recalled,
         temp = "",
         lastResult = 0,
         lastOperator = "+",
@@ -25,7 +26,21 @@
         handler(value);
     }
 
+    function isRecalled() {
+        let a = _elm.expression.textContent.lastIndexOf("+");
+        let b = _elm.expression.textContent.lastIndexOf("-");
+        let c = _elm.expression.textContent.lastIndexOf("×");
+        let d = _elm.expression.textContent.lastIndexOf("÷");
+        let max = Math.max(a, b, c, d);
+        let str = _elm.expression.textContent.substr(max + 2, _elm.expression.textContent.length - 1);
+        _elm.expression.textContent = _elm.expression.textContent.substr(0, max + 2);
+        _elm.result.textContent = str;
+        recalled = false;
+    }
+
     function onOperandClicked(value) {
+        if (recalled) recalled = false;
+
         if (!txtResult && !txtExpression && value === "0") return;
 
         if (value === "." && txtResult.includes(".")) return;
@@ -80,6 +95,7 @@
     }
 
     function onPlusMinesClicked() {
+        if(recalled) isRecalled();
         txtResult = _elm.result.textContent.includes("-") ?
             _elm.result.textContent.replace("-", "") :
             "-" + _elm.result.textContent;
@@ -161,6 +177,7 @@
 
     function onSpecOperatorClicked(value) {
         specSymbol = true;
+        if(recalled) isRecalled();
         computeTemp(value);
         evaluate(temp);
 

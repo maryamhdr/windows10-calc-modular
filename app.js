@@ -67,4 +67,16 @@
         app.calc(e.target.getAttribute('data-type'), e.target.getAttribute('data-value'));
     }
 
+    _elm.memorypad.onclick = function (e) {
+        app.mem(e.target.getAttribute('data-value'));
+    }
+
+    _elm.trashIcon1.parentNode.onclick = function () {
+        app.mem('mc');
+    }
+
+    _elm.trashIcon2.parentNode.onclick = function () {
+        app.mem('mc');
+    }
+
 }(app);
