@@ -94,14 +94,20 @@
         else return false;
     }
 
-    function includesSpecOperand() {
-        if (_elm.expression.textContent.includes("sqr") ||
-            _elm.expression.textContent.includes("cube") ||
-            _elm.expression.textContent.includes("1/") ||
-            _elm.expression.textContent.includes("√")) {
-            let max = expression.textContent.lastIndexOf("(");
-            expression.textContent = expression.textContent.substr(0, max + 1 - (cubeAcc * 5 + sqrAcc * 4 + sqrtAcc * 2 + divideAcc * 3));
-        }
+    function includesSpecOperand(text) {
+        if (text.includes("sqr") ||
+            text.includes("cube") ||
+            text.includes("1/") ||
+            text.includes("√")) return true;
+        else return false;
+    }
+
+    function checkTheEndOfExp() {
+        if (txtExpression.charAt(txtExpression.length - 1) === "+" ||
+            txtExpression.charAt(txtExpression.length - 1) === "-" ||
+            txtExpression.charAt(txtExpression.length - 1) === "÷" ||
+            txtExpression.charAt(txtExpression.length - 1) === "×") return true;
+        else return false;
     }
 
     function computeTemp(v) {
@@ -152,7 +158,6 @@
     }
 
     function onSpecOperatorClicked(value) {
-
         specSymbol = true;
         computeTemp(value);
         evaluate(temp);
@@ -163,14 +168,69 @@
             return;
         }
 
-        includesSpecOperand();
+        if (includesSpecOperand(_elm.expression.textContent)) {
+            let max = _elm.expression.textContent.lastIndexOf("(");
+            _elm.expression.textContent = _elm.expression.textContent.substr(0, max + 1 - (cubeAcc * 5 + sqrAcc * 4 + sqrtAcc * 2 + divideAcc * 3));
+        }
+
         computeAccurances();
         _elm.expression.textContent += txtResult + " ";
         return;
     }
 
-    function onNormalClicked() {
-        console.log("Normal")
+    function computeLastOpr(v) {
+        switch (v) {
+            case "+":
+            case "-":
+                lastOperator = v;
+                break;
+            case "÷":
+                lastOperator = "/";
+                break;
+            case "×":
+                lastOperator = "*";
+                break;
+        }
+    }
+
+    function resetAccurance() {
+        divideAcc = 0;
+        cubeAcc = 0;
+        sqrAcc = 0;
+        sqrtAcc = 0;
+    }
+
+    function replaceOpr() {
+        txtExpression = txtExpression.replace("÷", "/");
+        txtExpression = txtExpression.replace("×", "*");
+    }
+
+    function onNormalClicked(value) {
+        computeLastOpr(value);
+        resetAccurance();
+
+        if (specSymbol) {
+            txtExpression += temp;
+            temp = "";
+            specSymbol = false;
+        } else {
+            txtExpression += txtResult;
+        }
+
+        if (checkTheEndOfExp) {
+            txtExpression = txtExpression.substr(0, txtExpression.length - 1) + value;
+            _elm.expression.textContent = _elm.expression.textContent.substr(0, _elm.expression.textContent.length - 2) + value + " ";
+            return;
+        }
+
+        replaceOpr();
+
+        lastResult = eval(txtExpression);
+        txtExpression = lastResult + value;
+
+        result.textContent = lastResult;
+        _elm.expression.textContent += includesSpecOperand(txtResult) ? value + " " : txtResult + " " + value + " ";
+        txtResult = "";
     }
 
     function onEqualClicked() {

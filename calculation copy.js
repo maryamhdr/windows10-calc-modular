@@ -10,12 +10,8 @@ function valueBtnHandler(value, type) {
             if (recalled) {
                 recalled = false;
             }
-
-            
             break;
         case 'symbol':
-
-            
 
             // if (value === "±") {
 
@@ -36,8 +32,6 @@ function valueBtnHandler(value, type) {
 
             if (value === "√") {
 
-                
-
                 // if (recalled) {
                 //     let a = expression.textContent.lastIndexOf("+");
                 //     let b = expression.textContent.lastIndexOf("-");
@@ -55,8 +49,6 @@ function valueBtnHandler(value, type) {
 
             if (value === "sqr") {
 
-                specSymbol = true;
-
                 // if (recalled) {
                 //     let a = expression.textContent.lastIndexOf("+");
                 //     let b = expression.textContent.lastIndexOf("-");
@@ -68,15 +60,6 @@ function valueBtnHandler(value, type) {
                 //     result.textContent = str;
                 //     recalled = false;
                 // }
-
-
-                if (txtResult.indexOf('cube') === 0 || txtResult.indexOf('sqr') === 0 || txtResult.indexOf('1/') === 0 || txtResult.indexOf("√") === 0) {
-                    temp = "Math.pow(" + temp + ",2)";
-                    txtResult = "sqr(" + txtResult + ")";
-                } else {
-                    temp = "Math.pow(" + result.textContent + ",2)";
-                    txtResult = "sqr(" + result.textContent + ")";
-                }
 
             }
 
@@ -95,14 +78,6 @@ function valueBtnHandler(value, type) {
                 //     recalled = false;
                 // }
 
-                if (txtResult.indexOf('cube') === 0 || txtResult.indexOf('sqr') === 0 || txtResult.indexOf('1/') === 0 || txtResult.indexOf("√") === 0) {
-                    temp = "Math.pow(" + temp + ",3)";
-                    txtResult = "cube(" + txtResult + ")";
-                } else {
-                    temp = "Math.pow(" + result.textContent + ",3)";
-                    txtResult = "cube(" + result.textContent + ")";
-                }
-
             }
 
             if (value === "reverse") {
@@ -119,74 +94,7 @@ function valueBtnHandler(value, type) {
                 //     recalled = false;
                 // }
 
-                if (result.textContent === "0") {
-                    txtResult = "";
-                    txtExpression = "";
-                    result.textContent = "Cannot divide by zero";
-                    expression.textContent = "";
-                    return;
-                }
-
-                if (txtResult.indexOf('cube') === 0 || txtResult.indexOf('sqr') === 0 || txtResult.indexOf('1/') === 0 || txtResult.indexOf("√") === 0) {
-                    temp = "1/(" + temp + ")";
-                    txtResult = "1/(" + txtResult + ")";
-                } else {
-                    temp = "1/(" + result.textContent + ")";
-                }
-
             }
-
-            switch (value) {
-                case "+":
-                case "-":
-                    lastOperator = value;
-                    break;
-                case "÷":
-                    lastOperator = "/";
-                    break;
-                case "×":
-                    lastOperator = "*";
-                    break;
-            }
-
-            divideAcc = 0;
-            cubeAcc = 0;
-            sqrAcc = 0;
-            sqrtAcc = 0;
-
-            if(specSymbol) {
-                txtExpression += temp;
-                temp = "";
-                specSymbol = false;
-            }
-            else {
-                txtExpression += txtResult;
-            }
-
-            if (txtExpression.charAt(txtExpression.length - 1) === "+" ||
-                txtExpression.charAt(txtExpression.length - 1) === "-" ||
-                txtExpression.charAt(txtExpression.length - 1) === "÷" ||
-                txtExpression.charAt(txtExpression.length - 1) === "×") {
-
-                txtExpression = txtExpression.substr(0, txtExpression.length - 1);
-                txtExpression += value;
-                expression.textContent = expression.textContent.substr(0, expression.textContent.length - 2);
-                expression.textContent += value + " ";
-                return;
-            }
-
-            txtExpression = txtExpression.replace("÷", "/");
-            txtExpression = txtExpression.replace("×", "*");
-
-            lastResult = eval(txtExpression);
-
-            txtExpression = lastResult + value;
-
-            result.textContent = lastResult;
-            expression.textContent += txtResult.includes("√") || txtResult.includes("sqr") || txtResult.includes("cube") || txtResult.includes("/") ? value + " " : txtResult + " " + value + " ";
-
-            txtResult = "";
-            break;
     }
 
 }
@@ -254,19 +162,10 @@ function calculateResult() {
         return;
     }
 
-    if (txtExpression.includes('sqr')) {
-        txtExpression = txtExpression.replace(/\)/g, ",2)");
-        txtExpression = txtExpression.replace(/sqr/g, 'Math.pow');
-    }
 
-    if (txtExpression.includes('cube')) {
-        txtExpression = txtExpression.replace(/\)/g, ",3)");
-        txtExpression = txtExpression.replace(/cube/g, 'Math.pow');
-    }
 
     txtExpression = txtExpression.replace("÷", "/");
     txtExpression = txtExpression.replace("×", "*");
-    txtExpression = txtExpression.replace(/√/g, "Math.sqrt");
 
     result.textContent = eval(txtExpression);
 
