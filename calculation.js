@@ -8,6 +8,7 @@
         sqrAcc = 0,
         cubeAcc = 0,
         divideAcc = 0,
+        specSymbol = false,
         _elm = app.elements,
         _operations = {
             'operand': onOperandClicked,
@@ -16,7 +17,7 @@
             'ce': onCEClicked,
             'c': onClearAllClicked,
             'backspace': onBackspaceClicked
-        }
+        };
 
     app.calc = function (type, value) {
         var handler = _operations[type];
@@ -106,8 +107,9 @@
         if (txtExpression.charAt(txtExpression.length - 1) === "+" ||
             txtExpression.charAt(txtExpression.length - 1) === "-" ||
             txtExpression.charAt(txtExpression.length - 1) === "÷" ||
-            txtExpression.charAt(txtExpression.length - 1) === "×") return true;
-        else return false;
+            txtExpression.charAt(txtExpression.length - 1) === "×") {
+            return true;
+        } else return false;
     }
 
     function computeTemp(v) {
@@ -217,7 +219,7 @@
             txtExpression += txtResult;
         }
 
-        if (checkTheEndOfExp) {
+        if (checkTheEndOfExp()) {
             txtExpression = txtExpression.substr(0, txtExpression.length - 1) + value;
             _elm.expression.textContent = _elm.expression.textContent.substr(0, _elm.expression.textContent.length - 2) + value + " ";
             return;
@@ -233,8 +235,61 @@
         txtResult = "";
     }
 
-    function onEqualClicked() {
+    function computeOpr() {
+        let opr;
+        switch (lastOperator) {
+            case "*":
+                opr = "×";
+                break;
+            case "/":
+                opr = "÷";
+                break;
+            case "+":
+            case "-":
+                opr = lastOperator;
+                break;
+        }
+        return opr;
+    }
 
+    function onEqualFirstState() {
+        let operator = computeOpr();
+        let recursiveResult = parseFloat(_elm.result.textContent);
+
+        _elm.result.textContent = eval(recursiveResult + lastOperator + lastResult);
+        _elm.expression.textContent = recursiveResult + " " + operator + " " + lastResult;
+        // addHistory();
+        _elm.expression.textContent = "";
+        return;
+    }
+
+    function onEqualSecState() {
+        onEqualFirstState();
+        txtResult = "";
+        txtExpression = "";
+        return;
+    }
+
+    function onEqualClicked() {
+        txtExpression += txtResult;
+        if (!txtExpression) {
+            onEqualFirstState();
+            return;
+        }
+
+        if (checkTheEndOfExp()) {
+            onEqualSecState();
+            return;
+        }
+
+        replaceOpr();
+
+        _elm.result.textContent = eval(txtExpression);
+        _elm.expression.textContent += txtResult;
+        // addHistory();
+        _elm.expression.textContent = "";
+        txtResult = "";
+        txtExpression = "";
     }
 
     function onCEClicked() {
