@@ -79,4 +79,12 @@
         app.mem('mc');
     }
 
+    _elm.trashIcon3.parentNode.onclick = function () {
+        app.his('hc');
+    }
+
+    _elm.trashIcon4.parentNode.onclick = function () {
+        app.his('hc');
+    }
+
 }(app);

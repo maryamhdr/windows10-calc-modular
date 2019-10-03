@@ -275,7 +275,7 @@
 
         _elm.result.textContent = eval(recursiveResult + lastOperator + lastResult);
         _elm.expression.textContent = recursiveResult + " " + operator + " " + lastResult;
-        // addHistory();
+        app.his('ha');
         _elm.expression.textContent = "";
         return;
     }
@@ -303,7 +303,7 @@
 
         _elm.result.textContent = eval(txtExpression);
         _elm.expression.textContent += txtResult;
-        // addHistory();
+        app.his('ha');
         _elm.expression.textContent = "";
         txtResult = "";
         txtExpression = "";
