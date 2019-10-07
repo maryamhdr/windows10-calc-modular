@@ -51,21 +51,13 @@
                 const id1 = "historyItem1_" + item.id;
                 const id2 = 'historyItem2_' + item.id;
 
-                const listItem1 = document.createElement("li");
-                const itemExpression1 = document.createElement("div");
-                const itemResult1 = document.createElement("div");
+                const listItem1 = app.createElement('li', 'history-item');
+                const itemExpression1 = app.createElement('div', 'history-item-expression');
+                const itemResult1 = app.createElement('div', 'history-item-result');
 
-                const listItem2 = document.createElement("li");
-                const itemExpression2 = document.createElement("div");
-                const itemResult2 = document.createElement("div");
-
-                listItem1.className = "history-item";
-                itemExpression1.className = "history-item-expression";
-                itemResult1.className = "history-item-result";
-
-                listItem2.className = "history-item";
-                itemExpression2.className = "history-item-expression";
-                itemResult2.className = "history-item-result";
+                const listItem2 = app.createElement('li', 'history-item');
+                const itemExpression2 = app.createElement('div', 'history-item-expression');
+                const itemResult2 = app.createElement('div', 'history-item-result');
 
                 itemExpression1.textContent = item.expression;
                 itemResult1.textContent = item.result;
@@ -96,7 +88,7 @@
     }
 
     function onHistoryAddClicked() {
-        addHistoryItem(_elm.expression.textContent + " =", _elm.result.textContent);
+        addHistoryItem(app.expression() + " =", app.result());
         displayHistoryList();
     }
 
@@ -115,9 +107,9 @@
         id = parseInt(id);
         historyItems.map(item => {
             if (item.id === id) {
-                _elm.expression.textContent = item.expression.substr(0, item.expression.length - 2);
-                _elm.result.textContent = item.result;
-                txtExpression = _elm.expression.textContent;
+                app.expression(item.expression.substr(0, item.expression.length - 2));
+                app.result(item.result);
+                txtExpression = app.expression();
                 txtResult = "";
                 recalled = true;
             }

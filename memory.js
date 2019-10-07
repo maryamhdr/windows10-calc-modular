@@ -60,38 +60,23 @@
             initializeMemoryList();
 
             memoryItems.forEach(item => {
-                console.log(item)
                 const id1 = "memoryItem1_" + item.id;
                 const id2 = 'memoryItem2_' + item.id;
                 var value = item.value;
 
-                const listItem1 = document.createElement("li");
-                const savedValue1 = document.createElement("div");
-                const savedValueControls1 = document.createElement("div");
-                const btnDelete1 = document.createElement("button");
-                const btnIncrement1 = document.createElement("button");
-                const btnDecrement1 = document.createElement("button");
+                const listItem1 = app.createElement('li', 'memory-item');
+                const savedValue1 = app.createElement('div', 'saved-value');
+                const savedValueControls1 = app.createElement('div', 'saved-value-controls');
+                const btnDelete1 = app.createElement('button', 'control-btn');
+                const btnIncrement1 = app.createElement('button', 'control-btn');
+                const btnDecrement1 = app.createElement('button', 'control-btn');
 
-                const listItem2 = document.createElement("li");
-                const savedValue2 = document.createElement("div");
-                const savedValueControls2 = document.createElement("div");
-                const btnDelete2 = document.createElement("button");
-                const btnIncrement2 = document.createElement("button");
-                const btnDecrement2 = document.createElement("button");
-
-                listItem1.className = "memory-item";
-                savedValue1.className = "saved-value";
-                savedValueControls1.className = "saved-value-controls";
-                btnDecrement1.className = "control-btn";
-                btnIncrement1.className = "control-btn";
-                btnDelete1.className = "control-btn";
-
-                listItem2.className = "memory-item";
-                savedValue2.className = "saved-value";
-                savedValueControls2.className = "saved-value-controls";
-                btnDecrement2.className = "control-btn";
-                btnIncrement2.className = "control-btn";
-                btnDelete2.className = "control-btn";
+                const listItem2 = app.createElement('li', 'memory-item');
+                const savedValue2 = app.createElement('div', 'saved-value');
+                const savedValueControls2 = app.createElement('div', 'saved-value-controls');
+                const btnDelete2 = app.createElement('button', 'control-btn');
+                const btnIncrement2 = app.createElement('button', 'control-btn');
+                const btnDecrement2 = app.createElement('button', 'control-btn');
 
                 savedValue1.textContent = value;
                 btnDelete1.textContent = "MC";
@@ -136,7 +121,7 @@
     }
 
     function onMemoryClicked() {
-        addMemoryItem(parseFloat(_elm.result.textContent));
+        addMemoryItem(parseFloat(app.result()));
         displayMemoryList();
         txtResult = "";
     }
@@ -158,7 +143,7 @@
     }
 
     function incMemoryItem() {
-        const v = parseFloat(_elm.result.textContent);
+        const v = parseFloat(app.result());
         var id = this.parentNode.parentNode.id;
         id = id.includes('memoryItem1_') ? id.replace('memoryItem1_', '') : id.replace('memoryItem2_', '');
         id = parseInt(id);
@@ -170,7 +155,7 @@
     }
 
     function decMemoryItem() {
-        const v = parseFloat(_elm.result.textContent);
+        const v = parseFloat(app.result());
         var id = this.parentNode.parentNode.id;
         id = id.includes('memoryItem1_') ? id.replace('memoryItem1_', '') : id.replace('memoryItem2_', '');
         id = parseInt(id);
@@ -188,7 +173,7 @@
 
     function onMemoryRecallClicked() {
         txtResult = memoryItems[0].value;
-        _elm.result.textContent = txtResult;
+        app.result(txtResult);
         recalled = true;
     }
 
@@ -197,7 +182,7 @@
             onMemoryClicked();
             return;
         }
-        const v = parseFloat(_elm.result.textContent);
+        const v = parseFloat(app.result());
         var id = memoryItems.length - 1;
         memoryItems = memoryItems.map(item => item.id === id ? {
             id: item.id,
@@ -211,7 +196,7 @@
             onMemoryClicked();
             return;
         }
-        const v = parseFloat(_elm.result.textContent);
+        const v = parseFloat(app.result());
         var id = memoryItems.length - 1;
         memoryItems = memoryItems.map(item => item.id === id ? {
             id: item.id,

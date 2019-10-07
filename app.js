@@ -87,4 +87,20 @@
         app.his('hc');
     }
 
+    app.createElement = function (tag, className) {
+        const element = document.createElement(tag);
+        element.className = className;
+        return element;
+    }
+
+    app.result = function (value) {
+        if(value === undefined) return _elm.result.textContent;
+        return _elm.result.textContent = value;
+    }
+
+    app.expression = function (value) {
+        if(value === undefined) return _elm.expression.textContent;
+        return _elm.expression.textContent = value;
+    }
+
 }(app);

@@ -27,14 +27,14 @@
     }
 
     function isRecalled() {
-        let a = _elm.expression.textContent.lastIndexOf("+");
-        let b = _elm.expression.textContent.lastIndexOf("-");
-        let c = _elm.expression.textContent.lastIndexOf("×");
-        let d = _elm.expression.textContent.lastIndexOf("÷");
+        let a = app.expression().lastIndexOf("+");
+        let b = app.expression().lastIndexOf("-");
+        let c = app.expression().lastIndexOf("×");
+        let d = app.expression().lastIndexOf("÷");
         let max = Math.max(a, b, c, d);
-        let str = _elm.expression.textContent.substr(max + 2, _elm.expression.textContent.length - 1);
-        _elm.expression.textContent = _elm.expression.textContent.substr(0, max + 2);
-        _elm.result.textContent = str;
+        let str = app.expression().substr(max + 2, app.expression().length - 1);
+        app.expression(app.expression().substr(0, max + 2))
+        app.result(str);
         recalled = false;
     }
 
@@ -50,7 +50,7 @@
         }
 
         txtResult += value;
-        _elm.result.textContent = txtResult;
+        app.result(txtResult);
         lastResult = parseFloat(txtResult);
     }
 
@@ -65,12 +65,12 @@
             txtResult = txtResult.substr(0, txtResult.length - 1);
         }
 
-        if (value === "√" && _elm.result.textContent.includes("-")) {
+        if (value === "√" && app.result().includes("-")) {
             onClearAllClicked("Invalid input");
             return;
         }
 
-        if (value === "1/" && _elm.result.textContent === "0") {
+        if (value === "1/" && app.result() === "0") {
             onClearAllClicked("Cannot divide by zero");
             return;
         }
@@ -95,11 +95,11 @@
     }
 
     function onPlusMinesClicked() {
-        if(recalled) isRecalled();
-        txtResult = _elm.result.textContent.includes("-") ?
-            _elm.result.textContent.replace("-", "") :
-            "-" + _elm.result.textContent;
-        _elm.result.textContent = txtResult;
+        if (recalled) isRecalled();
+        txtResult = app.result().includes("-") ?
+            app.result().replace("-", "") :
+            "-" + app.result();
+        app.result(txtResult);
         return;
     }
 
@@ -148,24 +148,24 @@
         } else {
             switch (v) {
                 case "√":
-                    temp = `Math.sqrt(${_elm.result.textContent})`;
+                    temp = `Math.sqrt(${app.result()})`;
                     break;
                 case "sqr":
-                    temp = `Math.pow(${_elm.result.textContent},2)`;
+                    temp = `Math.pow(${app.result()},2)`;
                     break;
                 case "cube":
-                    temp = `Math.pow(${_elm.result.textContent},3)`;
+                    temp = `Math.pow(${app.result()},3)`;
                     break;
                 case "1/":
-                    temp = `1/(${_elm.result.textContent})`;
+                    temp = `1/(${app.result()})`;
                     break;
             }
-            txtResult = `${v}(${_elm.result.textContent})`;
+            txtResult = `${v}(${app.result()})`;
         }
     }
 
     function evaluate(value) {
-        _elm.result.textContent = eval(value);
+        app.result(eval(value));
     }
 
     function computeAccurances() {
@@ -177,23 +177,23 @@
 
     function onSpecOperatorClicked(value) {
         specSymbol = true;
-        if(recalled) isRecalled();
+        if (recalled) isRecalled();
         computeTemp(value);
         evaluate(temp);
 
         if (sqrtAcc + sqrAcc + divideAcc + cubeAcc === 0) {
-            _elm.expression.textContent += txtResult + " ";
+            app.expression(app.expression() + txtResult + " ");
             computeAccurances();
             return;
         }
 
-        if (includesSpecOperand(_elm.expression.textContent)) {
-            let max = _elm.expression.textContent.lastIndexOf("(");
-            _elm.expression.textContent = _elm.expression.textContent.substr(0, max + 1 - (cubeAcc * 5 + sqrAcc * 4 + sqrtAcc * 2 + divideAcc * 3));
+        if (includesSpecOperand(app.expression())) {
+            let max = app.expression().lastIndexOf("(");
+            app.expression(app.expression().substr(0, max + 1 - (cubeAcc * 5 + sqrAcc * 4 + sqrtAcc * 2 + divideAcc * 3)));
         }
 
         computeAccurances();
-        _elm.expression.textContent += txtResult + " ";
+        app.expression(app.expression() + txtResult + " ");
         return;
     }
 
@@ -238,7 +238,7 @@
 
         if (checkTheEndOfExp()) {
             txtExpression = txtExpression.substr(0, txtExpression.length - 1) + value;
-            _elm.expression.textContent = _elm.expression.textContent.substr(0, _elm.expression.textContent.length - 2) + value + " ";
+            app.expression(app.expression().substr(0, app.expression().length - 2) + value + " ");
             return;
         }
 
@@ -247,8 +247,8 @@
         lastResult = eval(txtExpression);
         txtExpression = lastResult + value;
 
-        result.textContent = lastResult;
-        _elm.expression.textContent += includesSpecOperand(txtResult) ? value + " " : txtResult + " " + value + " ";
+        app.result(lastResult);
+        includesSpecOperand(txtResult) ? app.expression(app.expression() + value + " ") : app.expression(app.expression() + txtResult + " " + value + " ");
         txtResult = "";
     }
 
@@ -271,12 +271,12 @@
 
     function onEqualFirstState() {
         let operator = computeOpr();
-        let recursiveResult = parseFloat(_elm.result.textContent);
+        let recursiveResult = parseFloat(app.result());
 
-        _elm.result.textContent = eval(recursiveResult + lastOperator + lastResult);
-        _elm.expression.textContent = recursiveResult + " " + operator + " " + lastResult;
+        app.result(eval(recursiveResult + lastOperator + lastResult));
+        app.expression(recursiveResult + " " + operator + " " + lastResult);
         app.his('ha');
-        _elm.expression.textContent = "";
+        app.expression("");
         return;
     }
 
@@ -301,35 +301,35 @@
 
         replaceOpr();
 
-        _elm.result.textContent = eval(txtExpression);
-        _elm.expression.textContent += txtResult;
+        app.result(eval(txtExpression));
+        app.expression(app.expression() + txtResult);
         app.his('ha');
-        _elm.expression.textContent = "";
+        app.expression("");
         txtResult = "";
         txtExpression = "";
     }
 
     function onCEClicked() {
         txtResult = "";
-        _elm.result.textContent = "0";
+        app.result('0');
     }
 
     function onClearAllClicked(v) {
         if (!v) v = "0";
         txtResult = "";
         txtExpression = "";
-        _elm.result.textContent = v;
-        _elm.expression.textContent = "";
+        app.result(v);
+        app.expression('');
     }
 
     function onBackspaceClicked() {
         if (!txtResult) {
-            _elm.result.textContent = "0";
+            app.result('0');
             return;
         }
         txtResult = txtResult.substring(0, txtResult.length - 1);
         lastResult = parseFloat(txtResult);
-        _elm.result.textContent = txtResult === "" ? "0" : txtResult;
+        txtResult === "" ? app.result('0') : app.result(txtResult);
     }
 
 }(app);
