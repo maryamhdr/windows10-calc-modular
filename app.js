@@ -87,12 +87,6 @@
         app.his('hc');
     }
 
-    app.createElement = function (tag, className) {
-        const element = document.createElement(tag);
-        element.className = className;
-        return element;
-    }
-
     app.result = function (value) {
         if (value === undefined) return _elm.result.textContent;
         return _elm.result.textContent = value;
@@ -152,13 +146,19 @@
         _elm.historyIcon.className = historyIcon.className.replace(" disabled", "");
     }
 
+    function createElement (tag, className) {
+        const element = document.createElement(tag);
+        element.className = className;
+        return element;
+    }
+
     function createMemoryItem(item, id) {
-        const listItem = app.createElement('li', 'memory-item');
-        const savedValue = app.createElement('div', 'saved-value');
-        const savedValueControls = app.createElement('div', 'saved-value-controls');
-        const btnDelete = app.createElement('button', 'control-btn');
-        const btnIncrement = app.createElement('button', 'control-btn');
-        const btnDecrement = app.createElement('button', 'control-btn');
+        const listItem = createElement('li', 'memory-item');
+        const savedValue = createElement('div', 'saved-value');
+        const savedValueControls = createElement('div', 'saved-value-controls');
+        const btnDelete = createElement('button', 'control-btn');
+        const btnIncrement = createElement('button', 'control-btn');
+        const btnDecrement = createElement('button', 'control-btn');
 
         savedValue.textContent = item.value;
         btnDelete.textContent = "MC";
@@ -194,9 +194,9 @@
     }
 
     function createHistoryItem(item, id) {
-        const listItem = app.createElement('li', 'history-item');
-        const itemExpression = app.createElement('div', 'history-item-expression');
-        const itemResult = app.createElement('div', 'history-item-result');
+        const listItem = createElement('li', 'history-item');
+        const itemExpression = createElement('div', 'history-item-expression');
+        const itemResult = createElement('div', 'history-item-result');
 
         itemExpression.textContent = item.expression;
         itemResult.textContent = item.result;
