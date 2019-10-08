@@ -179,7 +179,7 @@
         }
     }
 
-    function evaluate(value) {
+    function evaluate (value) {
         app.result(eval(value));
     }
 

@@ -548,6 +548,7 @@ body {
     align-items: center;
     justify-content: flex-end;
     margin-right: 18px;
+    margin-left: 18px;
     color: var(--dark-hover-color);
     font-size: 14px;
     font-weight: 400
