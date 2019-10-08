@@ -1,13 +1,11 @@
 + function (app) {
-    temp = "",
-        lastResult = 0,
+    var temp = "",
         lastOperator = "+",
         sqrtAcc = 0,
         sqrAcc = 0,
         cubeAcc = 0,
         divideAcc = 0,
         specSymbol = false,
-        _elm = app.elements,
         _glob = app.globals,
         _operations = {
             'operand': onOperandClicked,
@@ -32,12 +30,14 @@
         let max = Math.max(a, b, c, d);
         let str = app.expression().substr(max + 2, app.expression().length - 1);
         app.expression(app.expression().substr(0, max + 2));
-        app.result(str);
+        _glob.txtExpression = app.expression().substr(0, max + 2);
         _glob.recalled = false;
     }
 
     function onOperandClicked(value) {
-        if (_glob.recalled) _glob.recalled = false;
+        if (_glob.recalled) {
+            isRecalled();
+        };
 
         if (!_glob.txtResult && !_glob.txtExpression &&
             value === "0") return;
@@ -50,7 +50,7 @@
 
         _glob.txtResult += value;
         app.result(_glob.txtResult);
-        lastResult = parseFloat(_glob.txtResult);
+        _glob.lastResult = parseFloat(_glob.txtResult);
     }
 
     function onOperatorClicked(value) {
@@ -227,6 +227,7 @@
     }
 
     function onNormalClicked(value) {
+        if(_glob.recalled) _glob.recalled = false;
         computeLastOpr(value);
         resetAccurance();
 
@@ -246,10 +247,10 @@
 
         replaceOpr();
 
-        lastResult = eval(_glob.txtExpression);
-        _glob.txtExpression = lastResult + value;
+        _glob.lastResult = eval(_glob.txtExpression);
+        _glob.txtExpression = _glob.lastResult + value;
 
-        app.result(lastResult);
+        app.result(_glob.lastResult);
         includesSpecOperand(_glob.txtResult) ? app.expression(app.expression() + value + " ") : app.expression(app.expression() + _glob.txtResult + " " + value + " ");
         _glob.txtResult = "";
     }
@@ -275,8 +276,8 @@
         let operator = computeOpr();
         let recursiveResult = parseFloat(app.result());
 
-        app.result(eval(recursiveResult + lastOperator + lastResult));
-        app.expression(recursiveResult + " " + operator + " " + lastResult);
+        app.result(eval(recursiveResult + lastOperator + _glob.lastResult));
+        app.expression(recursiveResult + " " + operator + " " + _glob.lastResult);
         app.his('ha');
         app.expression("");
         return;
@@ -330,7 +331,7 @@
             return;
         }
         _glob.txtResult = _glob.txtResult.substring(0, _glob.txtResult.length - 1);
-        lastResult = parseFloat(_glob.txtResult);
+        _glob.lastResult = parseFloat(_glob.txtResult);
         _glob.txtResult === "" ? app.result('0') : app.result(_glob.txtResult);
     }
 

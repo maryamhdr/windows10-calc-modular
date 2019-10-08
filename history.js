@@ -1,7 +1,5 @@
 + function (app) {
     var historyItems = [],
-        recalled = app.globals.recalled,
-        _elm = app.elements,
         _glob = app.globals,
         _operations = {
             'hc': function () {
@@ -55,8 +53,9 @@
                 app.expression(item.expression.substr(0, item.expression.length - 2));
                 app.result(item.result);
                 _glob.txtExpression = app.expression();
+                _glob.lastResult = parseFloat(item.result);
                 _glob.txtResult = "";
-                recalled = true;
+                _glob.recalled = true;
             }
         })
     }

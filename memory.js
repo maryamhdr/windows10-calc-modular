@@ -1,7 +1,5 @@
 + function (app) {
     var memoryItems = [],
-        recalled = app.globals.recalled,
-        _elm = app.elements,
         _glob = app.globals,
         _operations = {
             'mc': function () {
