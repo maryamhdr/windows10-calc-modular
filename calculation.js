@@ -1,5 +1,5 @@
 + function (app) {
-        temp = "",
+    temp = "",
         lastResult = 0,
         lastOperator = "+",
         sqrtAcc = 0,
@@ -54,7 +54,10 @@
     }
 
     function onOperatorClicked(value) {
+
         var action;
+
+        _glob.txtResult = !_glob.txtResult.NaN ? _glob.txtResult.toString() : _glob.txtResult;
 
         if (!_glob.txtExpression && !_glob.txtResult) {
             if (value !== "√" && value !== "1/") return;
