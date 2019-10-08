@@ -291,7 +291,15 @@
     }
 
     function onEqualClicked() {
-        _glob.txtExpression += _glob.txtResult;
+        if (specSymbol) {
+            _glob.txtExpression += temp;
+            temp = "";
+            specSymbol = false;
+        } else {
+            _glob.txtExpression += _glob.txtResult;
+            app.expression(app.expression() + _glob.txtResult);
+        }
+        // _glob.txtExpression += _glob.txtResult;
         if (!_glob.txtExpression) {
             onEqualFirstState();
             return;
@@ -305,7 +313,6 @@
         replaceOpr();
 
         app.result(eval(_glob.txtExpression));
-        app.expression(app.expression() + _glob.txtResult);
         app.his('ha');
         app.expression("");
         _glob.txtResult = "";

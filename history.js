@@ -52,7 +52,7 @@
             if (item.id === id) {
                 app.expression(item.expression.substr(0, item.expression.length - 2));
                 app.result(item.result);
-                _glob.txtExpression = app.expression();
+                _glob.txtExpression = item.result;
                 _glob.lastResult = parseFloat(item.result);
                 _glob.txtResult = "";
                 _glob.recalled = true;
