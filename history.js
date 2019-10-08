@@ -1,8 +1,8 @@
 + function (app) {
     var historyItems = [],
-        txtResult = app.globals.txtResult,
         recalled = app.globals.recalled,
         _elm = app.elements,
+        _glob = app.globals,
         _operations = {
             'hc': function () {
                 onHistoryClearClicked();
@@ -54,8 +54,8 @@
             if (item.id === id) {
                 app.expression(item.expression.substr(0, item.expression.length - 2));
                 app.result(item.result);
-                txtExpression = app.expression();
-                txtResult = "";
+                _glob.txtExpression = app.expression();
+                _glob.txtResult = "";
                 recalled = true;
             }
         })

@@ -1,8 +1,8 @@
 + function (app) {
     var memoryItems = [],
-        txtResult = app.globals.txtResult,
         recalled = app.globals.recalled,
         _elm = app.elements,
+        _glob = app.globals,
         _operations = {
             'mc': function () {
                 onMemoryClearClicked();
@@ -39,7 +39,7 @@
     function onMemoryClicked() {
         addMemoryItem(parseFloat(app.result()));
         displayMemoryList();
-        txtResult = "";
+        _glob.txtResult = "";
     }
 
     function addMemoryItem(value) {
@@ -88,8 +88,8 @@
     }
 
     function onMemoryRecallClicked() {
-        txtResult = memoryItems[0].value;
-        app.result(txtResult);
+        _glob.txtResult = memoryItems[0].value;
+        app.result(_glob.txtResult);
         recalled = true;
     }
 

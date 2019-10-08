@@ -1,7 +1,4 @@
 + function (app) {
-    var txtResult = app.globals.txtResult,
-        txtExpression = app.globals.txtExpression,
-        recalled = app.globals.recalled,
         temp = "",
         lastResult = 0,
         lastOperator = "+",
@@ -11,6 +8,7 @@
         divideAcc = 0,
         specSymbol = false,
         _elm = app.elements,
+        _glob = app.globals,
         _operations = {
             'operand': onOperandClicked,
             'operator': onOperatorClicked,
@@ -33,36 +31,37 @@
         let d = app.expression().lastIndexOf("÷");
         let max = Math.max(a, b, c, d);
         let str = app.expression().substr(max + 2, app.expression().length - 1);
-        app.expression(app.expression().substr(0, max + 2))
+        app.expression(app.expression().substr(0, max + 2));
         app.result(str);
-        recalled = false;
+        _glob.recalled = false;
     }
 
     function onOperandClicked(value) {
-        if (recalled) recalled = false;
+        if (_glob.recalled) _glob.recalled = false;
 
-        if (!txtResult && !txtExpression && value === "0") return;
+        if (!_glob.txtResult && !_glob.txtExpression &&
+            value === "0") return;
 
-        if (value === "." && txtResult.includes(".")) return;
+        if (value === "." && _glob.txtResult.includes(".")) return;
 
-        if (value === "." && !txtResult) {
-            txtResult = "0";
+        if (value === "." && !_glob.txtResult) {
+            _glob.txtResult = "0";
         }
 
-        txtResult += value;
-        app.result(txtResult);
-        lastResult = parseFloat(txtResult);
+        _glob.txtResult += value;
+        app.result(_glob.txtResult);
+        lastResult = parseFloat(_glob.txtResult);
     }
 
     function onOperatorClicked(value) {
         var action;
 
-        if (!txtExpression && !txtResult) {
+        if (!_glob.txtExpression && !_glob.txtResult) {
             if (value !== "√" && value !== "1/") return;
         }
 
-        if (txtResult.charAt(txtResult.length - 1) === ".") {
-            txtResult = txtResult.substr(0, txtResult.length - 1);
+        if (_glob.txtResult.charAt(_glob.txtResult.length - 1) === ".") {
+            _glob.txtResult = _glob.txtResult.substr(0, _glob.txtResult.length - 1);
         }
 
         if (value === "√" && app.result().includes("-")) {
@@ -95,19 +94,19 @@
     }
 
     function onPlusMinesClicked() {
-        if (recalled) isRecalled();
-        txtResult = app.result().includes("-") ?
+        if (_glob.recalled) isRecalled();
+        _glob.txtResult = app.result().includes("-") ?
             app.result().replace("-", "") :
             "-" + app.result();
-        app.result(txtResult);
+        app.result(_glob.txtResult);
         return;
     }
 
     function checkIndexOfSpecOperand() {
-        if (txtResult.indexOf('cube') === 0 ||
-            txtResult.indexOf('sqr') === 0 ||
-            txtResult.indexOf('1/') === 0 ||
-            txtResult.indexOf("√") === 0) return true;
+        if (_glob.txtResult.indexOf('cube') === 0 ||
+            _glob.txtResult.indexOf('sqr') === 0 ||
+            _glob.txtResult.indexOf('1/') === 0 ||
+            _glob.txtResult.indexOf("√") === 0) return true;
         else return false;
     }
 
@@ -120,10 +119,10 @@
     }
 
     function checkTheEndOfExp() {
-        if (txtExpression.charAt(txtExpression.length - 1) === "+" ||
-            txtExpression.charAt(txtExpression.length - 1) === "-" ||
-            txtExpression.charAt(txtExpression.length - 1) === "÷" ||
-            txtExpression.charAt(txtExpression.length - 1) === "×") {
+        if (_glob.txtExpression.charAt(_glob.txtExpression.length - 1) === "+" ||
+            _glob.txtExpression.charAt(_glob.txtExpression.length - 1) === "-" ||
+            _glob.txtExpression.charAt(_glob.txtExpression.length - 1) === "÷" ||
+            _glob.txtExpression.charAt(_glob.txtExpression.length - 1) === "×") {
             return true;
         } else return false;
     }
@@ -144,7 +143,7 @@
                     temp = `1/(${temp})`;
                     break;
             }
-            txtResult = `${v}(${txtResult})`;
+            _glob.txtResult = `${v}(${_glob.txtResult})`;
         } else {
             switch (v) {
                 case "√":
@@ -160,7 +159,7 @@
                     temp = `1/(${app.result()})`;
                     break;
             }
-            txtResult = `${v}(${app.result()})`;
+            _glob.txtResult = `${v}(${app.result()})`;
         }
     }
 
@@ -169,20 +168,20 @@
     }
 
     function computeAccurances() {
-        divideAcc = (txtResult.match(/\//g) || []).length;
-        cubeAcc = (txtResult.match(/cube/g) || []).length;
-        sqrAcc = (txtResult.match(/sqr/g) || []).length;
-        sqrtAcc = (txtResult.match(/√/g) || []).length;
+        divideAcc = (_glob.txtResult.match(/\//g) || []).length;
+        cubeAcc = (_glob.txtResult.match(/cube/g) || []).length;
+        sqrAcc = (_glob.txtResult.match(/sqr/g) || []).length;
+        sqrtAcc = (_glob.txtResult.match(/√/g) || []).length;
     }
 
     function onSpecOperatorClicked(value) {
         specSymbol = true;
-        if (recalled) isRecalled();
+        if (_glob.recalled) isRecalled();
         computeTemp(value);
         evaluate(temp);
 
         if (sqrtAcc + sqrAcc + divideAcc + cubeAcc === 0) {
-            app.expression(app.expression() + txtResult + " ");
+            app.expression(app.expression() + _glob.txtResult + " ");
             computeAccurances();
             return;
         }
@@ -193,7 +192,7 @@
         }
 
         computeAccurances();
-        app.expression(app.expression() + txtResult + " ");
+        app.expression(app.expression() + _glob.txtResult + " ");
         return;
     }
 
@@ -220,8 +219,8 @@
     }
 
     function replaceOpr() {
-        txtExpression = txtExpression.replace("÷", "/");
-        txtExpression = txtExpression.replace("×", "*");
+        _glob.txtExpression = _glob.txtExpression.replace("÷", "/");
+        _glob.txtExpression = _glob.txtExpression.replace("×", "*");
     }
 
     function onNormalClicked(value) {
@@ -229,27 +228,27 @@
         resetAccurance();
 
         if (specSymbol) {
-            txtExpression += temp;
+            _glob.txtExpression += temp;
             temp = "";
             specSymbol = false;
         } else {
-            txtExpression += txtResult;
+            _glob.txtExpression += _glob.txtResult;
         }
 
         if (checkTheEndOfExp()) {
-            txtExpression = txtExpression.substr(0, txtExpression.length - 1) + value;
+            _glob.txtExpression = _glob.txtExpression.substr(0, _glob.txtExpression.length - 1) + value;
             app.expression(app.expression().substr(0, app.expression().length - 2) + value + " ");
             return;
         }
 
         replaceOpr();
 
-        lastResult = eval(txtExpression);
-        txtExpression = lastResult + value;
+        lastResult = eval(_glob.txtExpression);
+        _glob.txtExpression = lastResult + value;
 
         app.result(lastResult);
-        includesSpecOperand(txtResult) ? app.expression(app.expression() + value + " ") : app.expression(app.expression() + txtResult + " " + value + " ");
-        txtResult = "";
+        includesSpecOperand(_glob.txtResult) ? app.expression(app.expression() + value + " ") : app.expression(app.expression() + _glob.txtResult + " " + value + " ");
+        _glob.txtResult = "";
     }
 
     function computeOpr() {
@@ -282,14 +281,14 @@
 
     function onEqualSecState() {
         onEqualFirstState();
-        txtResult = "";
-        txtExpression = "";
+        _glob.txtResult = "";
+        _glob.txtExpression = "";
         return;
     }
 
     function onEqualClicked() {
-        txtExpression += txtResult;
-        if (!txtExpression) {
+        _glob.txtExpression += _glob.txtResult;
+        if (!_glob.txtExpression) {
             onEqualFirstState();
             return;
         }
@@ -301,35 +300,35 @@
 
         replaceOpr();
 
-        app.result(eval(txtExpression));
-        app.expression(app.expression() + txtResult);
+        app.result(eval(_glob.txtExpression));
+        app.expression(app.expression() + _glob.txtResult);
         app.his('ha');
         app.expression("");
-        txtResult = "";
-        txtExpression = "";
+        _glob.txtResult = "";
+        _glob.txtExpression = "";
     }
 
     function onCEClicked() {
-        txtResult = "";
+        _glob.txtResult = "";
         app.result('0');
     }
 
     function onClearAllClicked(v) {
         if (!v) v = "0";
-        txtResult = "";
-        txtExpression = "";
+        _glob.txtResult = "";
+        _glob.txtExpression = "";
         app.result(v);
         app.expression('');
     }
 
     function onBackspaceClicked() {
-        if (!txtResult) {
+        if (!_glob.txtResult) {
             app.result('0');
             return;
         }
-        txtResult = txtResult.substring(0, txtResult.length - 1);
-        lastResult = parseFloat(txtResult);
-        txtResult === "" ? app.result('0') : app.result(txtResult);
+        _glob.txtResult = _glob.txtResult.substring(0, _glob.txtResult.length - 1);
+        lastResult = parseFloat(_glob.txtResult);
+        _glob.txtResult === "" ? app.result('0') : app.result(_glob.txtResult);
     }
 
 }(app);
