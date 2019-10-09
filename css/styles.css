@@ -24,7 +24,8 @@ body {
 
 .custom-font {
     font-family: 'Lucida Calligraphy';
-    letter-spacing: 0
+    letter-spacing: 0;
+    font-size: 16px !important
 }
 
 .up-position {
