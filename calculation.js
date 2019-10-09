@@ -110,12 +110,19 @@
 
     function onPercentageClicked () {
         let value = eval(_glob.txtExpression.substr(0, _glob.txtExpression.length - 1));
-        let percentage = parseFloat(app.result())/100;
-        value = (value*percentage);
-        // app.result(value)
-        // app.expression(app.expression() + value)
-        // // _glob.txtResult = "";
-        // console.log(_glob.txtResult)
+        if(!value) {
+            app.expression('');
+            app.result('0');
+            _glob.txtResult = "";
+            _glob.txtExpression = "";
+            _glob.lastResult = 0;
+            return;
+        }
+        let percentage = parseFloat(app.result()) / 100;
+        value = (value * percentage);
+        _glob.txtResult = value;
+        app.result(_glob.txtResult);
+        _glob.lastResult = parseFloat(_glob.txtResult);
     }
 
     function checkIndexOfSpecOperand() {
