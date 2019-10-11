@@ -42,13 +42,13 @@
 
     function addMemoryItem(value) {
         const item = {
-            id: memoryItems.length,
+            id: memoryItems.length !== 0 ? memoryItems[memoryItems.length - 1].id + 1 : 1,
             value: value
         };
         memoryItems.unshift(item);
     }
 
-    app.deleteMemoryItem =  function () {
+    app.deleteMemoryItem = function () {
         var id = this.parentNode.parentNode.id;
         id = id.includes('memoryItem1_') ? id.replace('memoryItem1_', '') : id.replace('memoryItem2_', '');
         id = parseInt(id);

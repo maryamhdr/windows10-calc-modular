@@ -87,7 +87,7 @@
             case "1/":
                 action = onSpecOperatorClicked;
                 break;
-            case "%": 
+            case "%":
                 action = onPercentageClicked;
                 break;
             default:
@@ -99,7 +99,7 @@
         return;
     }
 
-    function onPlusMinesClicked () {
+    function onPlusMinesClicked() {
         if (_glob.recalled) isRecalled();
         _glob.txtResult = app.result().includes("-") ?
             app.result().replace("-", "") :
@@ -108,9 +108,9 @@
         return;
     }
 
-    function onPercentageClicked () {
+    function onPercentageClicked() {
         let value = eval(_glob.txtExpression.substr(0, _glob.txtExpression.length - 1));
-        if(!value) {
+        if (!value) {
             app.expression('');
             app.result('0');
             _glob.txtResult = "";
@@ -133,7 +133,7 @@
         else return false;
     }
 
-    function includesSpecOperand (text) {
+    function includesSpecOperand(text) {
         if (text.includes("sqr") ||
             text.includes("cube") ||
             text.includes("1/") ||
@@ -141,7 +141,7 @@
         else return false;
     }
 
-    function checkTheEndOfExp () {
+    function checkTheEndOfExp() {
         if (_glob.txtExpression.charAt(_glob.txtExpression.length - 1) === "+" ||
             _glob.txtExpression.charAt(_glob.txtExpression.length - 1) === "-" ||
             _glob.txtExpression.charAt(_glob.txtExpression.length - 1) === "÷" ||
@@ -150,7 +150,7 @@
         } else return false;
     }
 
-    function computeTemp (v) {
+    function computeTemp(v) {
         if (checkIndexOfSpecOperand()) {
             switch (v) {
                 case "√":
@@ -186,18 +186,18 @@
         }
     }
 
-    function evaluate (value) {
+    function evaluate(value) {
         app.result(eval(value));
     }
 
-    function computeAccurances () {
+    function computeAccurances() {
         divideAcc = (_glob.txtResult.match(/\//g) || []).length;
         cubeAcc = (_glob.txtResult.match(/cube/g) || []).length;
         sqrAcc = (_glob.txtResult.match(/sqr/g) || []).length;
         sqrtAcc = (_glob.txtResult.match(/√/g) || []).length;
     }
 
-    function onSpecOperatorClicked (value) {
+    function onSpecOperatorClicked(value) {
         specSymbol = true;
         if (_glob.recalled) isRecalled();
         computeTemp(value);
@@ -219,7 +219,7 @@
         return;
     }
 
-    function computeLastOpr (v) {
+    function computeLastOpr(v) {
         switch (v) {
             case "+":
             case "-":
@@ -234,20 +234,20 @@
         }
     }
 
-    function resetAccurance () {
+    function resetAccurance() {
         divideAcc = 0;
         cubeAcc = 0;
         sqrAcc = 0;
         sqrtAcc = 0;
     }
 
-    function replaceOpr () {
+    function replaceOpr() {
         _glob.txtExpression = _glob.txtExpression.replace("÷", "/");
         _glob.txtExpression = _glob.txtExpression.replace("×", "*");
     }
 
-    function onNormalClicked (value) {
-        if(_glob.recalled) _glob.recalled = false;
+    function onNormalClicked(value) {
+        if (_glob.recalled) _glob.recalled = false;
         computeLastOpr(value);
         resetAccurance();
 
@@ -275,7 +275,7 @@
         _glob.txtResult = "";
     }
 
-    function computeOpr () {
+    function computeOpr() {
         let opr;
         switch (lastOperator) {
             case "*":
@@ -292,7 +292,7 @@
         return opr;
     }
 
-    function onEqualFirstState () {
+    function onEqualFirstState() {
         let operator = computeOpr();
         let recursiveResult = parseFloat(app.result());
 
@@ -303,14 +303,14 @@
         return;
     }
 
-    function onEqualSecState () {
+    function onEqualSecState() {
         onEqualFirstState();
         _glob.txtResult = "";
         _glob.txtExpression = "";
         return;
     }
 
-    function onEqualClicked () {
+    function onEqualClicked() {
         if (specSymbol) {
             _glob.txtExpression += temp;
             temp = "";
@@ -338,12 +338,12 @@
         _glob.txtExpression = "";
     }
 
-    function onCEClicked () {
+    function onCEClicked() {
         _glob.txtResult = "";
         app.result('0');
     }
 
-    function onClearAllClicked (v) {
+    function onClearAllClicked(v) {
         if (!v) v = "0";
         _glob.txtResult = "";
         _glob.txtExpression = "";
@@ -351,7 +351,7 @@
         app.expression('');
     }
 
-    function onBackspaceClicked () {
+    function onBackspaceClicked() {
         if (!_glob.txtResult) {
             app.result('0');
             return;

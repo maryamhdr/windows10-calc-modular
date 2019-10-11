@@ -37,7 +37,7 @@
 
     function addHistoryItem(exp, res) {
         const item = {
-            id: historyItems.length,
+            id: historyItems.length !== 0 ? historyItems[historyItems.length - 1].id + 1 : 1,
             expression: exp,
             result: res
         };
